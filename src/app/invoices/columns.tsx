@@ -12,10 +12,8 @@ export type Payment = {
   invoiceNumber: string;
   total: number;
   status: string;
-  customer: {
-    fullName: string;
-  };
-  currency: string;
+  fullName: string;
+  currency?: string;
 };
 
 export const columns: ColumnDef<Payment>[] = [
@@ -26,7 +24,7 @@ export const columns: ColumnDef<Payment>[] = [
       const badgeClassName =
         row.getValue("status") === "draft"
           ? "bg-gray-500"
-          : row.getValue("status") === "authorised"
+          : row.getValue("status") === "authorised" || row.getValue("status") === "paid"
           ? "bg-green-500"
           : "bg-gray-500";
 
@@ -41,7 +39,9 @@ export const columns: ColumnDef<Payment>[] = [
     accessorKey: "fullName",
     header: "Full Name",
     cell: ({ row }) => {
-      return <div className="font-small">{row.original.customer.fullName}</div>;
+      return <div className="font-small">
+        {row.getValue("fullName")}
+      </div>;
     },
   },
   {
@@ -72,7 +72,7 @@ export const columns: ColumnDef<Payment>[] = [
       const amount = parseFloat(row.getValue("total"));
       const formatted = new Intl.NumberFormat("en-US", {
         style: "currency",
-        currency: row.original.currency,
+        currency: row.original.currency || "USD",
       }).format(amount);
 
       return <div className="text-right font-small">{formatted}</div>;

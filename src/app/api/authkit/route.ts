@@ -20,8 +20,8 @@ export async function POST(req: NextRequest) {
     process.env.INTEGRATIONOS_API_KEY as string
   );
   const token = await embedToken.create({
-    group: "krish's-group-13",
-    label: "krish's-label-13",
+    group: "krish's-group-14",
+    label: "krish's-label-14",
   });
 
 

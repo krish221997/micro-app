@@ -23,6 +23,17 @@ export async function POST(req: NextRequest) {
 
     for (const connectionKey of connectionKeys) {
       let response = await integrate.invoices(connectionKey).list();
+    response.unified = response.unified.map((invoice) => {
+        return {
+            id: invoice.id,
+            invoiceNumber: invoice.invoiceNumber,
+            total: invoice.total,
+            status: invoice.status,
+            fullName: invoice.customer?.fullName || invoice.customer?.email
+            };
+        }
+    );
+
         finalResponse = [...finalResponse, ...response.unified]
     }
 

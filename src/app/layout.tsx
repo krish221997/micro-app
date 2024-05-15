@@ -3,8 +3,8 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import ClientLayout from "./ClientLayout";
 import { ThemeProvider } from "@/components/theme-provider";
+import { GeistSans } from 'geist/font/sans';
 
-const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -16,7 +16,7 @@ export default function RootLayout({
 }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="en">
-      <body className={inter.className}>
+      <body className={GeistSans.className}>
         <ClientLayout>
           <ThemeProvider
             attribute="class"
