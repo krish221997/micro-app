@@ -8,5 +8,6 @@ export default function useListConnections() {
     queryKey: [keys["list.connections"]],
     queryFn: () => listConnectionsApi(),
     staleTime: 5 * 60 * 1000,
+    retry: false,
   });
 }

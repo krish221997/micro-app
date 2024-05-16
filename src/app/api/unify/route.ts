@@ -17,33 +17,30 @@ export async function POST(req: NextRequest) {
   );
   try {
     const body = await req.json();
-    const { connectionKeys } = body;
+
+    const { connections } = body;
 
     let finalResponse: unknown[] = [];
 
-    for (const connectionKey of connectionKeys) {
-      let response = await integrate.invoices(connectionKey).list();
-    response.unified = response.unified.map((invoice) => {
-        return {
-            id: invoice.id,
-            invoiceNumber: invoice.invoiceNumber,
-            total: invoice.total,
-            status: invoice.status,
-            fullName: invoice.customer?.fullName || invoice.customer?.email
-            };
-        }
-    );
+    for (const connection of connections) {
+      let response = await integrate.invoices(connection).list();
 
-        finalResponse = [...finalResponse, ...response.unified]
+      response.unified = response.unified.map((invoice) => {
+        return {
+          ...invoice,
+          connectionKey: connection,
+        };
+      });
+
+      finalResponse = [...finalResponse, ...response.unified];
     }
 
     return NextResponse.json(finalResponse, {
       headers: corsHeaders,
     });
   } catch (error) {
-    console.error(error);
     return NextResponse.json(
-      { error: "Invalid request" },
+      { error: "Some error occurred" },
       {
         status: 400,
         headers: corsHeaders,

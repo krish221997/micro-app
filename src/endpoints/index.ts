@@ -12,6 +12,7 @@ export const domain = "https://api.integrationos.com/v1";
 export const keys = {
   "list.connection.definitions": "connection.definition.list",
   "list.connections": "connections.list",
+  "list.invoices": "invoices.list",
 }
 
 export const api = async ({ method, url, headers, payload }: IProps) => {

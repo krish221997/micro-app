@@ -32,16 +32,18 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { ListFilter } from "lucide-react";
+import { ListFilter, RefreshCcw } from "lucide-react";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
+  onClickSync: () => void;
 }
 
 export function DataTable<TData, TValue>({
   columns,
   data,
+  onClickSync,
 }: DataTableProps<TData, TValue>) {
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
@@ -68,6 +70,7 @@ export function DataTable<TData, TValue>({
     },
   });
 
+  const statusList = ["draft", "authorised", "paid", "deleted", "submitted", "voided"]
 
   return (
     <div>
@@ -83,6 +86,14 @@ export function DataTable<TData, TValue>({
           className="max-w-sm"
         />
         <div className="ml-auto flex space-x-2">
+          {/* <Button onClick={onClickSync} variant="outline" size="sm">
+
+            Sync
+          </Button> */}
+          <Button variant="outline"  onClick={onClickSync}>
+                <RefreshCcw className="h-3.5 w-3.5" />
+                <span className="sr-only sm:not-sr-only">Sync</span>
+              </Button>
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button variant="outline">
@@ -93,31 +104,17 @@ export function DataTable<TData, TValue>({
             <DropdownMenuContent align="end">
               <DropdownMenuLabel>Filter by status</DropdownMenuLabel>
               <DropdownMenuSeparator />
-              {/* Add Logic to filter by status - status is one of draft and authorised, you can also select both at the same time */}
-              <DropdownMenuCheckboxItem
-                checked={
-                  table.getColumn("status")?.getFilterValue() === "draft"
-                }
-                onCheckedChange={(value) =>
-                  table
-                    .getColumn("status")
-                    ?.setFilterValue(value ? "draft" : "")
-                }
-              >
-                Draft
-              </DropdownMenuCheckboxItem>
-              <DropdownMenuCheckboxItem
-                checked={
-                  table.getColumn("status")?.getFilterValue() === "authorised"
-                }
-                onCheckedChange={(value) =>
-                  table
-                    .getColumn("status")
-                    ?.setFilterValue(value ? "authorised" : "")
-                }
-              >
-                Authorised
-              </DropdownMenuCheckboxItem>
+                {statusList.map((status) => (
+                    <DropdownMenuCheckboxItem
+                    key={status}
+                    checked={table.getColumn("status")?.getFilterValue() === status}
+                    onCheckedChange={(value) =>
+                        table.getColumn("status")?.setFilterValue(value ? status : "")
+                    }
+                    >
+                    {status}
+                    </DropdownMenuCheckboxItem>
+                ))}
             </DropdownMenuContent>
           </DropdownMenu>
           <DropdownMenu>

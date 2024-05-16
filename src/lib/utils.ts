@@ -1,6 +1,7 @@
 import { type ClassValue, clsx } from "clsx"
 import { twMerge } from "tailwind-merge"
 import localforage from "localforage";
+import { v4 as uuidv4 } from "uuid";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
@@ -52,4 +53,8 @@ export const getValueFromCache = async (key: string) => {
     return;
   }
   return _value;
+};
+
+export const createRandomUUID = () => {
+  return uuidv4().split("-")[0];
 };

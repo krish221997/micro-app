@@ -1,7 +1,6 @@
 import { ConnectionsList } from "@/components/sections/Settings/ConnectionsList";
 import useListConnectionDefinitions from "@/hooks/useListConnectionDefinitions";
 import useListConnections from "@/hooks/useListConnections";
-import { useOpenAuthKitUx } from "@/hooks/ux/useOpenAuthKitUx";
 import { Skeleton } from "@/components/ui/skeleton";
 
 export const ControlledConnectionsList = () => {
@@ -12,8 +11,6 @@ export const ControlledConnectionsList = () => {
     data: connectionDefinitions,
     isLoading: isLoadingConnectionDefinitions,
   } = useListConnectionDefinitions();
-
-  const { trigger } = useOpenAuthKitUx();
 
   return (
     <>
@@ -28,7 +25,6 @@ export const ControlledConnectionsList = () => {
         )}
       {(isLoadingConnections || isLoadingConnectionDefinitions) && (
         <div className="grid gap-6 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
-          {/* Render 3 skeletons */}
           {Array.from({ length: 3 }).map((_, index) => (
             <div className="flex flex-col space-y-3" key={index}>
               <Skeleton className="h-[125px]  bg-gray-300 rounded-xl" />

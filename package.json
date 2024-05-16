@@ -12,6 +12,7 @@
     "@integrationos/authkit": "^1.0.2",
     "@integrationos/authkit-node": "^1.0.6",
     "@integrationos/node": "^3.7.6",
+    "@radix-ui/react-avatar": "^1.0.4",
     "@radix-ui/react-checkbox": "^1.0.4",
     "@radix-ui/react-dialog": "^1.0.5",
     "@radix-ui/react-dropdown-menu": "^2.0.6",
@@ -32,6 +33,7 @@
     "react-dom": "^18",
     "tailwind-merge": "^2.3.0",
     "tailwindcss-animate": "^1.0.7",
+    "uuid": "^9.0.1",
     "valtio": "^1.13.2"
   },
   "devDependencies": {
@@ -39,6 +41,7 @@
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",
+    "@types/uuid": "^9.0.8",
     "eslint": "^8",
     "eslint-config-next": "14.2.3",
     "postcss": "^8",
