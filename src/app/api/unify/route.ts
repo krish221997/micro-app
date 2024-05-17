@@ -8,10 +8,16 @@ const corsHeaders = {
 };
 
 export async function OPTIONS(req: NextRequest) {
+
+  console.log("=========== inside options ===========");
+
   return NextResponse.json({}, { headers: corsHeaders });
 }
 
 export async function POST(req: NextRequest) {
+
+  console.log("============ inside post ===========");
+
   const integrate = new IntegrationOS(
     process.env.INTEGRATIONOS_API_KEY as string
   );
@@ -20,10 +26,14 @@ export async function POST(req: NextRequest) {
 
     const { connections } = body;
 
+    console.log("connections: ", connections)
+
     let finalResponse: unknown[] = [];
 
     for (const connection of connections) {
       let response = await integrate.invoices(connection).list();
+
+      console.log(response, "response from integrationos");
 
       response.unified = response.unified.map((invoice) => {
         return {
@@ -39,6 +49,7 @@ export async function POST(req: NextRequest) {
       headers: corsHeaders,
     });
   } catch (error) {
+    console.log(error);
     return NextResponse.json(
       { error: "Some error occurred" },
       {
