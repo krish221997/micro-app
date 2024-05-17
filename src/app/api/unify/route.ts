@@ -8,16 +8,13 @@ const corsHeaders = {
 };
 
 export async function OPTIONS(req: NextRequest) {
-
-  console.log("=========== inside options ===========");
-
-  return NextResponse.json({}, { headers: corsHeaders });
+  const response = NextResponse.json({}, { headers: corsHeaders });
+  response.headers.set("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
+  response.headers.set("Access-Control-Allow-Headers", "Content-Type, Authorization");
+  return response;
 }
 
 export async function POST(req: NextRequest) {
-
-  console.log("============ inside post ===========");
-
   const integrate = new IntegrationOS(
     process.env.INTEGRATIONOS_API_KEY as string
   );
@@ -26,14 +23,10 @@ export async function POST(req: NextRequest) {
 
     const { connections } = body;
 
-    console.log("connections: ", connections)
-
     let finalResponse: unknown[] = [];
 
     for (const connection of connections) {
       let response = await integrate.invoices(connection).list();
-
-      console.log(response, "response from integrationos");
 
       response.unified = response.unified.map((invoice) => {
         return {
