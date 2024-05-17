@@ -9,10 +9,7 @@ const corsHeaders = {
 };
 
 export async function OPTIONS(req: NextRequest) {
-  const response = NextResponse.json({}, { headers: corsHeaders });
-  response.headers.set("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
-  response.headers.set("Access-Control-Allow-Headers", "Content-Type, Authorization");
-  return response;
+  return NextResponse.json({}, { headers: corsHeaders });
 }
 
 export async function POST(req: NextRequest) {
