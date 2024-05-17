@@ -4,7 +4,7 @@ import { api, domain } from ".";
 export const listConnectionsApi = () =>
   api({
     method: "GET",
-    url: `https://micro-app-jade.vercel.app/api/connections`,
+    url: `${getDomain()}/api/connections`,
     payload: {},
     headers: {
       "Content-Type": "application/json",

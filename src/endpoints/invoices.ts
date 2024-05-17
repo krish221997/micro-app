@@ -4,7 +4,7 @@ import { api } from ".";
 export const listInvoicesApi = (connections: string[]) =>
   api({
     method: "POST",
-    url: `https://micro-app-jade.vercel.app/api/unify`,
+    url: `${getDomain()}/api/unify`,
     payload: {
       connections,
     },

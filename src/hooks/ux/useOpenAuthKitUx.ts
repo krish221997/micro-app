@@ -8,7 +8,7 @@ export const useOpenAuthKitUx = () => {
 
   const { open } = useAuthKit({
     token: {
-      url: `https://micro-app-jade.vercel.app/api/authkit`,
+      url: `${getDomain()}/api/authkit`,
     },
     appTheme: "light",
     onSuccess: () => {
