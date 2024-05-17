@@ -1,11 +1,12 @@
+import { getDomain } from "@/lib/utils";
 import { api } from ".";
 
 export const listInvoicesApi = (connections: string[]) =>
   api({
     method: "POST",
-    url: `${window.location.origin}/api/unify`,
+    url: `${getDomain()}/api/unify`,
     payload: {
-        connections
+      connections,
     },
     headers: {
       "Content-Type": "application/json",

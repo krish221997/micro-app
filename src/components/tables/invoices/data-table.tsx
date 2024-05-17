@@ -36,14 +36,16 @@ import { ListFilter, RefreshCcw } from "lucide-react";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
-  data: TData[];
+  data?: TData[];
   onClickSync: () => void;
+  isLoading?: boolean;
 }
 
 export function DataTable<TData, TValue>({
   columns,
-  data,
+  data = [],
   onClickSync,
+  isLoading,
 }: DataTableProps<TData, TValue>) {
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
@@ -70,30 +72,33 @@ export function DataTable<TData, TValue>({
     },
   });
 
-  const statusList = ["draft", "authorised", "paid", "deleted", "submitted", "voided"]
+  const statusList = [
+    "draft",
+    "authorised",
+    "paid",
+    "deleted",
+    "submitted",
+    "voided",
+  ];
 
   return (
     <div>
       <div className="flex items-center py-4">
         <Input
-          placeholder="Filter name or email..."
+          placeholder="Filter by invoice number"
           value={
-            (table.getColumn("fullName")?.getFilterValue() as string) ?? ""
+            (table.getColumn("invoiceNumber")?.getFilterValue() as string) ?? ""
           }
           onChange={(event) =>
-            table.getColumn("fullName")?.setFilterValue(event.target.value)
+            table.getColumn("invoiceNumber")?.setFilterValue(event.target.value)
           }
           className="max-w-sm"
         />
         <div className="ml-auto flex space-x-2">
-          {/* <Button onClick={onClickSync} variant="outline" size="sm">
-
-            Sync
-          </Button> */}
-          <Button variant="outline"  onClick={onClickSync}>
-                <RefreshCcw className="h-3.5 w-3.5" />
-                <span className="sr-only sm:not-sr-only">Sync</span>
-              </Button>
+          <Button variant="outline" onClick={onClickSync}>
+            <RefreshCcw className="h-3.5 w-3.5" />
+            <span className="sr-only sm:not-sr-only">Sync</span>
+          </Button>
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button variant="outline">
@@ -104,17 +109,21 @@ export function DataTable<TData, TValue>({
             <DropdownMenuContent align="end">
               <DropdownMenuLabel>Filter by status</DropdownMenuLabel>
               <DropdownMenuSeparator />
-                {statusList.map((status) => (
-                    <DropdownMenuCheckboxItem
-                    key={status}
-                    checked={table.getColumn("status")?.getFilterValue() === status}
-                    onCheckedChange={(value) =>
-                        table.getColumn("status")?.setFilterValue(value ? status : "")
-                    }
-                    >
-                    {status}
-                    </DropdownMenuCheckboxItem>
-                ))}
+              {statusList.map((status) => (
+                <DropdownMenuCheckboxItem
+                  key={status}
+                  checked={
+                    table.getColumn("status")?.getFilterValue() === status
+                  }
+                  onCheckedChange={(value) =>
+                    table
+                      .getColumn("status")
+                      ?.setFilterValue(value ? status : "")
+                  }
+                >
+                  {status}
+                </DropdownMenuCheckboxItem>
+              ))}
             </DropdownMenuContent>
           </DropdownMenu>
           <DropdownMenu>
@@ -163,36 +172,51 @@ export function DataTable<TData, TValue>({
               </TableRow>
             ))}
           </TableHeader>
-          <TableBody>
-            {table.getRowModel().rows?.length ? (
-              table.getRowModel().rows.map((row) => (
-                <TableRow
-                  key={row.id}
-                  data-state={row.getIsSelected() && "selected"}
-                >
-                  {row.getVisibleCells().map((cell) => (
-                    <TableCell key={cell.id}>
-                      {flexRender(
-                        cell.column.columnDef.cell,
-                        cell.getContext()
-                      )}
-                    </TableCell>
-                  ))}
+          {!isLoading && (
+            <TableBody>
+              {table.getRowModel().rows?.length ? (
+                table.getRowModel().rows.map((row) => (
+                  <TableRow
+                    key={row.id}
+                    data-state={row.getIsSelected() && "selected"}
+                  >
+                    {row.getVisibleCells().map((cell) => (
+                      <TableCell key={cell.id}>
+                        {flexRender(
+                          cell.column.columnDef.cell,
+                          cell.getContext()
+                        )}
+                      </TableCell>
+                    ))}
+                  </TableRow>
+                ))
+              ) : (
+                <TableRow>
+                  <TableCell
+                    colSpan={columns.length}
+                    className="h-24 text-center"
+                  >
+                    No results.
+                  </TableCell>
                 </TableRow>
-              ))
-            ) : (
-              <TableRow>
-                <TableCell
-                  colSpan={columns.length}
-                  className="h-24 text-center"
-                >
-                  No results.
-                </TableCell>
-              </TableRow>
-            )}
-          </TableBody>
+              )}
+            </TableBody>
+          )}
+          {isLoading && (
+            <TableBody>
+              {Array.from({ length: 10 }).map((_, index) => (
+                <TableRow key={index}>
+                  <TableCell
+                    colSpan={columns.length}
+                    className="h-10 bg-gray-300"
+                  />
+                </TableRow>
+              ))}
+            </TableBody>
+          )}
         </Table>
       </div>
+
       <div className="flex items-center justify-end space-x-2 py-4">
         <Button
           variant="outline"

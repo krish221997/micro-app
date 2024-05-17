@@ -54,7 +54,8 @@ export default function useListInvoices() {
       invoiceNumber: invoice.invoiceNumber,
       total: invoice.total,
       status: invoice.status,
-      fullName: invoice.customer?.email || invoice.customer?.fullName,
+      fullName: invoice.customer?.fullName,
+      currency: invoice.currency,
       platform: {
         image: connectionMapping?.find(
           (c) => c.connectionKey === invoice.connectionKey

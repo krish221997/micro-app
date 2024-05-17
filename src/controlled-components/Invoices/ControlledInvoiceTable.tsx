@@ -1,4 +1,3 @@
-import { LoadingState } from "@/components/tables/LoadingState";
 import { columns } from "@/components/tables/invoices/columns";
 import { DataTable } from "@/components/tables/invoices/data-table";
 import useListInvoices from "@/hooks/useListInvoices";
@@ -11,10 +10,12 @@ export const ControlledInvoiceTable = () => {
 
   return (
     <div className="container mx-auto py-10">
-      {!isLoading && !isSyncing && data && (
-        <DataTable onClickSync={trigger} columns={columns} data={data} />
-      )}
-      {(isLoading || isSyncing) && <LoadingState />}
+      <DataTable
+        onClickSync={trigger}
+        columns={columns}
+        data={data}
+        isLoading={isLoading || isSyncing || !data}
+      />
     </div>
   );
 };

@@ -1,5 +1,4 @@
-import { createRandomUUID } from "@/lib/utils";
-import { AuthKitToken } from "@integrationos/authkit-node";
+import { api, domain } from "@/endpoints";
 import { NextRequest, NextResponse } from "next/server";
 
 const corsHeaders = {
@@ -12,17 +11,17 @@ export async function OPTIONS(req: NextRequest) {
   return NextResponse.json({}, { headers: corsHeaders });
 }
 
-export async function POST(req: NextRequest) {
+export async function GET() {
   try {
-    const embedToken = new AuthKitToken(
-      process.env.INTEGRATIONOS_API_KEY as string
-    );
-    const token = await embedToken.create({
-      group: `organizationId-${createRandomUUID()}`,
-      label: `organizationName-${createRandomUUID()}`,
+    const data = await api({
+      method: "GET",
+      url: `${domain}/connections?limit=100&skip=0`,
+      headers: {
+        "X-IntegrationOS-Secret": process.env.INTEGRATIONOS_API_KEY as string,
+      },
     });
 
-    return NextResponse.json(token, {
+    return NextResponse.json(data, {
       headers: corsHeaders,
     });
   } catch (error) {

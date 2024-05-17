@@ -28,7 +28,7 @@ export const columns: ColumnDef<Payment>[] = [
   },
   {
     accessorKey: "fullName",
-    header: "Name/Email",
+    header: "Name",
     cell: ({ row }) => {
       return <div className="font-small">{row.getValue("fullName")}</div>;
     },
@@ -40,7 +40,7 @@ export const columns: ColumnDef<Payment>[] = [
       const amount = parseFloat(row.getValue("total"));
       const formatted = new Intl.NumberFormat("en-US", {
         style: "currency",
-        currency: row.original.currency || "USD",
+        currency: row.original.currency,
       }).format(amount);
 
       return <div className="font-small">{formatted}</div>;
@@ -66,7 +66,10 @@ export const columns: ColumnDef<Payment>[] = [
           : "bg-gray-400 hover:bg-gray-400";
 
       return (
-        <Badge className={`py-0 px-1 rounded-sm text-xs font-medium ${badgeClassName}`} style={{fontSize: "0.7rem"}}>
+        <Badge
+          className={`py-0 px-1 rounded-sm text-xs font-medium ${badgeClassName}`}
+          style={{ fontSize: "0.7rem" }}
+        >
           {row.getValue("status")}
         </Badge>
       );
